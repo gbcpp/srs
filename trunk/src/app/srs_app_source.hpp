@@ -37,9 +37,9 @@ class SrsMessageArray;
 class SrsNgExec;
 class SrsMessageHeader;
 class SrsHls;
-class SrsRtc;
-class SrsDvr;
-class SrsDash;
+// class SrsRtc;
+// class SrsDvr;
+// class SrsDash;
 class SrsEncoder;
 class SrsBuffer;
 #ifdef SRS_HDS
@@ -321,9 +321,9 @@ private:
     // hls handler.
     SrsHls* hls;
     // The DASH encoder.
-    SrsDash* dash;
+    // SrsDash* dash;
     // dvr handler.
-    SrsDvr* dvr;
+    // SrsDvr* dvr;
     // transcoding handler.
     SrsEncoder* encoder;
 #ifdef SRS_HDS

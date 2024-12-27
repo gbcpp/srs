@@ -14,13 +14,13 @@ using namespace std;
 #include <srs_protocol_rtmp_stack.hpp>
 #include <srs_protocol_amf0.hpp>
 #include <srs_kernel_codec.hpp>
-#include <srs_kernel_rtc_rtp.hpp>
+// #include <srs_kernel_rtc_rtp.hpp>
 #include <srs_app_hls.hpp>
 #include <srs_app_forward.hpp>
 #include <srs_app_config.hpp>
 #include <srs_app_encoder.hpp>
 #include <srs_protocol_rtmp_stack.hpp>
-#include <srs_app_dvr.hpp>
+// #include <srs_app_dvr.hpp>
 #include <srs_kernel_buffer.hpp>
 #include <srs_app_edge.hpp>
 #include <srs_kernel_utility.hpp>
@@ -31,7 +31,7 @@ using namespace std;
 #include <srs_core_autofree.hpp>
 #include <srs_protocol_utility.hpp>
 #include <srs_app_ng_exec.hpp>
-#include <srs_app_dash.hpp>
+// #include <srs_app_dash.hpp>
 #include <srs_protocol_format.hpp>
 #include <srs_app_rtc_source.hpp>
 #include <srs_app_http_hooks.hpp>
@@ -825,8 +825,8 @@ SrsOriginHub::SrsOriginHub()
     is_active = false;
     
     hls = new SrsHls();
-    dash = new SrsDash();
-    dvr = new SrsDvr();
+    // dash = new SrsDash();
+    // dvr = new SrsDvr();
     encoder = new SrsEncoder();
 #ifdef SRS_HDS
     hds = new SrsHds();
@@ -851,8 +851,8 @@ SrsOriginHub::~SrsOriginHub()
     srs_freep(ng_exec);
 
     srs_freep(hls);
-    srs_freep(dash);
-    srs_freep(dvr);
+    // srs_freep(dash);
+    // srs_freep(dvr);
     srs_freep(encoder);
 #ifdef SRS_HDS
     srs_freep(hds);
@@ -870,13 +870,13 @@ srs_error_t SrsOriginHub::initialize(SrsLiveSource* s, SrsRequest* r)
         return srs_error_wrap(err, "hls initialize");
     }
     
-    if ((err = dash->initialize(this, req_)) != srs_success) {
-        return srs_error_wrap(err, "dash initialize");
-    }
+    // if ((err = dash->initialize(this, req_)) != srs_success) {
+    //     return srs_error_wrap(err, "dash initialize");
+    // }
     
-    if ((err = dvr->initialize(this, req_)) != srs_success) {
-        return srs_error_wrap(err, "dvr initialize");
-    }
+    // if ((err = dvr->initialize(this, req_)) != srs_success) {
+    //     return srs_error_wrap(err, "dvr initialize");
+    // }
     
     return err;
 }
@@ -884,7 +884,7 @@ srs_error_t SrsOriginHub::initialize(SrsLiveSource* s, SrsRequest* r)
 void SrsOriginHub::dispose()
 {
     hls->dispose();
-    dash->dispose();
+    // dash->dispose();
 }
 
 srs_error_t SrsOriginHub::cycle()
@@ -895,9 +895,9 @@ srs_error_t SrsOriginHub::cycle()
         return srs_error_wrap(err, "hls cycle");
     }
     
-    if ((err = dash->cycle()) != srs_success) {
-        return srs_error_wrap(err, "dash cycle");
-    }
+    // if ((err = dash->cycle()) != srs_success) {
+    //     return srs_error_wrap(err, "dash cycle");
+    // }
     
     return err;
 }
@@ -922,9 +922,9 @@ srs_error_t SrsOriginHub::on_meta_data(SrsSharedPtrMessage* shared_metadata, Srs
         }
     }
     
-    if ((err = dvr->on_meta_data(shared_metadata)) != srs_success) {
-        return srs_error_wrap(err, "DVR consume metadata");
-    }
+    // if ((err = dvr->on_meta_data(shared_metadata)) != srs_success) {
+    //     return srs_error_wrap(err, "DVR consume metadata");
+    // }
     
     return err;
 }
@@ -982,17 +982,17 @@ srs_error_t SrsOriginHub::on_audio(SrsSharedPtrMessage* shared_audio)
         }
     }
     
-    if ((err = dash->on_audio(msg, format)) != srs_success) {
-        srs_warn("dash: ignore audio error %s", srs_error_desc(err).c_str());
-        srs_error_reset(err);
-        dash->on_unpublish();
-    }
+    // if ((err = dash->on_audio(msg, format)) != srs_success) {
+    //     srs_warn("dash: ignore audio error %s", srs_error_desc(err).c_str());
+    //     srs_error_reset(err);
+    //     dash->on_unpublish();
+    // }
     
-    if ((err = dvr->on_audio(msg, format)) != srs_success) {
-        srs_warn("dvr: ignore audio error %s", srs_error_desc(err).c_str());
-        srs_error_reset(err);
-        dvr->on_unpublish();
-    }
+    // if ((err = dvr->on_audio(msg, format)) != srs_success) {
+    //     srs_warn("dvr: ignore audio error %s", srs_error_desc(err).c_str());
+    //     srs_error_reset(err);
+    //     dvr->on_unpublish();
+    // }
     
 #ifdef SRS_HDS
     if ((err = hds->on_audio(msg)) != srs_success) {
@@ -1067,17 +1067,17 @@ srs_error_t SrsOriginHub::on_video(SrsSharedPtrMessage* shared_video, bool is_se
         }
     }
     
-    if ((err = dash->on_video(msg, format)) != srs_success) {
-        srs_warn("dash: ignore video error %s", srs_error_desc(err).c_str());
-        srs_error_reset(err);
-        dash->on_unpublish();
-    }
+    // if ((err = dash->on_video(msg, format)) != srs_success) {
+    //     srs_warn("dash: ignore video error %s", srs_error_desc(err).c_str());
+    //     srs_error_reset(err);
+    //     dash->on_unpublish();
+    // }
     
-    if ((err = dvr->on_video(msg, format)) != srs_success) {
-        srs_warn("dvr: ignore video error %s", srs_error_desc(err).c_str());
-        srs_error_reset(err);
-        dvr->on_unpublish();
-    }
+    // if ((err = dvr->on_video(msg, format)) != srs_success) {
+    //     srs_warn("dvr: ignore video error %s", srs_error_desc(err).c_str());
+    //     srs_error_reset(err);
+    //     dvr->on_unpublish();
+    // }
     
 #ifdef SRS_HDS
     if ((err = hds->on_video(msg)) != srs_success) {
@@ -1119,14 +1119,14 @@ srs_error_t SrsOriginHub::on_publish()
         return srs_error_wrap(err, "hls publish");
     }
     
-    if ((err = dash->on_publish()) != srs_success) {
-        return srs_error_wrap(err, "dash publish");
-    }
+    // if ((err = dash->on_publish()) != srs_success) {
+    //     return srs_error_wrap(err, "dash publish");
+    // }
     
     // @see https://github.com/ossrs/srs/issues/1613#issuecomment-961657927
-    if ((err = dvr->on_publish(req_)) != srs_success) {
-        return srs_error_wrap(err, "dvr publish");
-    }
+    // if ((err = dvr->on_publish(req_)) != srs_success) {
+    //     return srs_error_wrap(err, "dvr publish");
+    // }
     
     // TODO: FIXME: use initialize to set req.
 #ifdef SRS_HDS
@@ -1154,8 +1154,8 @@ void SrsOriginHub::on_unpublish()
     
     encoder->on_unpublish();
     hls->on_unpublish();
-    dash->on_unpublish();
-    dvr->on_unpublish();
+    // dash->on_unpublish();
+    // dvr->on_unpublish();
     
 #ifdef SRS_HDS
     hds->on_unpublish();
@@ -1198,21 +1198,21 @@ srs_error_t SrsOriginHub::on_dvr_request_sh()
     // feed the dvr the metadata/sequence header,
     // when reload to start dvr, dvr will never get the sequence header in stream,
     // use the SrsLiveSource.on_dvr_request_sh to push the sequence header to DVR.
-    if (cache_metadata && (err = dvr->on_meta_data(cache_metadata)) != srs_success) {
-        return srs_error_wrap(err, "dvr metadata");
-    }
+    // if (cache_metadata && (err = dvr->on_meta_data(cache_metadata)) != srs_success) {
+    //     return srs_error_wrap(err, "dvr metadata");
+    // }
     
-    if (cache_sh_video) {
-        if ((err = dvr->on_video(cache_sh_video, source->meta->vsh_format())) != srs_success) {
-            return srs_error_wrap(err, "dvr video");
-        }
-    }
+    // if (cache_sh_video) {
+    //     if ((err = dvr->on_video(cache_sh_video, source->meta->vsh_format())) != srs_success) {
+    //         return srs_error_wrap(err, "dvr video");
+    //     }
+    // }
     
-    if (cache_sh_audio) {
-        if ((err = dvr->on_audio(cache_sh_audio, source->meta->ash_format())) != srs_success) {
-            return srs_error_wrap(err, "dvr audio");
-        }
-    }
+    // if (cache_sh_audio) {
+    //     if ((err = dvr->on_audio(cache_sh_audio, source->meta->ash_format())) != srs_success) {
+    //         return srs_error_wrap(err, "dvr audio");
+    //     }
+    // }
     
     return err;
 }
@@ -1275,16 +1275,16 @@ srs_error_t SrsOriginHub::on_reload_vhost_dash(string vhost)
 
     // TODO: FIXME: Must do async reload, see SrsHls::async_reload.
 
-    dash->on_unpublish();
+    // dash->on_unpublish();
     
     // Don't start DASH when source is not active.
     if (!is_active) {
         return err;
     }
     
-    if ((err = dash->on_publish()) != srs_success) {
-        return srs_error_wrap(err, "dash start publish");
-    }
+    // if ((err = dash->on_publish()) != srs_success) {
+    //     return srs_error_wrap(err, "dash start publish");
+    // }
 
     SrsRtmpFormat* format = source->format_;
     
@@ -1293,9 +1293,9 @@ srs_error_t SrsOriginHub::on_reload_vhost_dash(string vhost)
         if ((err = format->on_video(cache_sh_video)) != srs_success) {
             return srs_error_wrap(err, "format on_video");
         }
-        if ((err = dash->on_video(cache_sh_video, format)) != srs_success) {
-            return srs_error_wrap(err, "dash on_video");
-        }
+        // if ((err = dash->on_video(cache_sh_video, format)) != srs_success) {
+        //     return srs_error_wrap(err, "dash on_video");
+        // }
     }
     
     SrsSharedPtrMessage* cache_sh_audio = source->meta->ash();
@@ -1303,9 +1303,9 @@ srs_error_t SrsOriginHub::on_reload_vhost_dash(string vhost)
         if ((err = format->on_audio(cache_sh_audio)) != srs_success) {
             return srs_error_wrap(err, "format on_audio");
         }
-        if ((err = dash->on_audio(cache_sh_audio, format)) != srs_success) {
-            return srs_error_wrap(err, "dash on_audio");
-        }
+        // if ((err = dash->on_audio(cache_sh_audio, format)) != srs_success) {
+        //     return srs_error_wrap(err, "dash on_audio");
+        // }
     }
     
     return err;
@@ -1362,26 +1362,26 @@ srs_error_t SrsOriginHub::on_reload_vhost_dvr(string vhost)
     // TODO: FIXME: Must do async reload, see SrsHls::async_reload.
     
     // cleanup dvr
-    dvr->on_unpublish();
+    // dvr->on_unpublish();
     
     // Don't start DVR when source is not active.
     if (!is_active) {
         return err;
     }
     
-    // reinitialize the dvr, update plan.
-    if ((err = dvr->initialize(this, req_)) != srs_success) {
-        return srs_error_wrap(err, "reload dvr");
-    }
+    // // reinitialize the dvr, update plan.
+    // if ((err = dvr->initialize(this, req_)) != srs_success) {
+    //     return srs_error_wrap(err, "reload dvr");
+    // }
     
-    // start to publish by new plan.
-    if ((err = dvr->on_publish(req_)) != srs_success) {
-        return srs_error_wrap(err, "dvr publish failed");
-    }
+    // // start to publish by new plan.
+    // if ((err = dvr->on_publish(req_)) != srs_success) {
+    //     return srs_error_wrap(err, "dvr publish failed");
+    // }
     
-    if ((err = on_dvr_request_sh()) != srs_success) {
-        return srs_error_wrap(err, "request sh");
-    }
+    // if ((err = on_dvr_request_sh()) != srs_success) {
+    //     return srs_error_wrap(err, "request sh");
+    // }
     
     srs_trace("vhost %s dvr reload success", vhost.c_str());
     

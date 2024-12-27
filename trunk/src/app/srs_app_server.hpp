@@ -39,7 +39,7 @@ class SrsLatestVersion;
 class SrsWaitGroup;
 class SrsMultipleTcpListeners;
 class SrsHttpFlvListener;
-class SrsUdpCasterListener;
+// class SrsUdpCasterListener;
 class SrsGbListener;
 
 // Convert signal to io,
@@ -133,7 +133,7 @@ private:
     // Stream Caster for push over HTTP-FLV.
     SrsHttpFlvListener* stream_caster_flv_listener_;
     // Stream Caster for push over MPEGTS-UDP
-    SrsUdpCasterListener* stream_caster_mpegts_;
+    // SrsUdpCasterListener* stream_caster_mpegts_;
     // Exporter server listener, over TCP. Please note that metrics request of HTTP is served by this
     // listener, and it might be reused by HTTP API.
     SrsTcpListener* exporter_listener_;
